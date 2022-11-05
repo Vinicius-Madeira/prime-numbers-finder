@@ -10,7 +10,7 @@ public class Program {
 
         Scanner sc = new Scanner(System.in);
 
-        PrimeNumbers.execute(sc);
+        UI.execute(sc);
 
         sc.close();
     }
