@@ -4,10 +4,11 @@ import java.util.Scanner;
 
 import static model.entities.PrimeNumbers.*;
 
-
 public class UI {
 
-    public static void execute(Scanner scanner) {
+    public static void execute() {
+        Scanner scanner = new Scanner(System.in);
+
         System.out.printf("Find prime numbers (from), (to), (one), (next) specific number? or (quit)?%n");
         String line = scanner.nextLine().toLowerCase();
         while (!line.equals("from") && !line.equals("to") && !line.equals("quit") && !line.equals("one") && !line.equals("next")) {
@@ -16,33 +17,33 @@ public class UI {
         }
         switch (line) {
             case "from" -> {
-                System.out.print("From number: ");
+                System.out.print("Start number: ");
                 while (!scanner.hasNextInt()) {
                     System.out.println("Invalid value!");
-                    System.out.print("From number: ");
+                    System.out.print("Start number: ");
                     scanner.nextLine();
                 }
-                int fromNumber = scanner.nextInt();
+                int startNumber = scanner.nextInt();
                 scanner.nextLine();
 
-                System.out.print("To number: ");
+                System.out.print("End number: ");
                 while (!scanner.hasNextInt()) {
                     System.out.println("Invalid value!");
-                    System.out.print("To number: ");
+                    System.out.print("End number: ");
                     scanner.nextLine();
                 }
-                int toNumber = scanner.nextInt();
-                from(fromNumber, toNumber);
+                int endNumber = scanner.nextInt();
+                findFrom(startNumber, endNumber);
             }
             case "to" -> {
-                System.out.print("To number: ");
+                System.out.print("End number: ");
                 while (!scanner.hasNextInt()) {
                     System.out.println("Invalid value!");
-                    System.out.print("To number: ");
+                    System.out.print("End number: ");
                     scanner.nextLine();
                 }
-                int toNumber = scanner.nextInt();
-                to(toNumber);
+                int endNumber = scanner.nextInt();
+                findTo(endNumber);
             }
             case "one" -> {
                 System.out.print("Number: ");
@@ -55,13 +56,13 @@ public class UI {
                 findOne(number);
             }
             case "next" -> {
-                System.out.print("From number: ");
+                System.out.print("Start number: ");
                 while (!scanner.hasNextInt()) {
                     System.out.println("Invalid value!");
-                    System.out.print("From number: ");
+                    System.out.print("Start number: ");
                     scanner.nextLine();
                 }
-                int fromNumber = scanner.nextInt();
+                int startNumber = scanner.nextInt();
                 scanner.nextLine();
 
                 System.out.print("Next prime numbers: ");
@@ -71,10 +72,11 @@ public class UI {
                     scanner.nextLine();
                 }
                 int nextPrimeNumbers = scanner.nextInt();
-                findNext(fromNumber, nextPrimeNumbers);
+                findNext(startNumber, nextPrimeNumbers);
             }
             case "quit" -> System.exit(0);
             default -> throw new RuntimeException("An unknown error has occurred.");
         }
+        scanner.close();
     }
 }

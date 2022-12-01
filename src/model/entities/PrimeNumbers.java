@@ -1,35 +1,42 @@
 package model.entities;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class PrimeNumbers {
 
-    private static final Integer[] initialPN = {2, 3};
+    private static final Integer[] initialPrimeNumbers = {2, 3};
 
-    private static final Set<Integer> set = new LinkedHashSet<>(Arrays.asList(initialPN));
+    private static final List<Integer> listOfPrimeNumbers = new ArrayList<>(Arrays.asList(initialPrimeNumbers));
 
-
-
-    public static void to(int toNumber) {
-        if (toNumber <= 1) {
+    public static void findTo(int endNumber) {
+        if (endNumber < 1) {
             throw new IllegalArgumentException("Cannot find prime numbers prior to one.");
         }
-        findAll(toNumber);
-        printList(set.stream().sorted().collect(Collectors.toCollection(LinkedHashSet::new)));
+        switch (endNumber) {
+            case 1 -> listOfPrimeNumbers.clear();
+            case 2 -> listOfPrimeNumbers.remove(3);
+            default -> {
+                findAll(endNumber);
+                printList(listOfPrimeNumbers);
+            }
+        }
     }
 
-    public static void from(int fromNumber, int toNumber) {
-        if (fromNumber <= 0) {
+    public static void findFrom(int startNumber, int endNumber) {
+        if (startNumber <= 0) {
             throw new IllegalArgumentException("Cannot find prime numbers from negative numbers or zero.");
         }
-        if (toNumber < fromNumber) {
+        if (endNumber < startNumber) {
             throw new IllegalArgumentException("Prime numbers out of reach. Cannot traverse to an endpoint lower than the starting point.");
         }
-        findAll(toNumber);
-        set.removeIf(x -> x < fromNumber);
-        printList(set.stream().sorted().collect(Collectors.toCollection(LinkedHashSet::new)));
-        count();
+        if (startNumber == 1 && endNumber == 2 || startNumber == 2 && endNumber == 2) {
+            listOfPrimeNumbers.remove(3);
+        }
+        findAll(endNumber);
+        listOfPrimeNumbers.removeIf(x -> x < startNumber);
+        printList(listOfPrimeNumbers);
     }
 
     public static void findOne(int number) {
@@ -37,7 +44,7 @@ public class PrimeNumbers {
             throw new IllegalArgumentException("There are no prime number below or equal to zero.");
         }
         findAll(number);
-        if (set.stream().anyMatch(x -> x == number)) {
+        if (listOfPrimeNumbers.stream().anyMatch(x -> x == number)) {
             System.out.println(number + " is a prime number!");
         }
         else {
@@ -45,82 +52,82 @@ public class PrimeNumbers {
         }
     }
 
-    public static void findNext(int fromNumber, int nextPrimeNumbers) {
-        if (fromNumber <= 0) {
+    public static void findNext(int startNumber, int nextPrimeNumbers) {
+        if (startNumber <= 0) {
             throw new IllegalArgumentException("Cannot find prime numbers from negative numbers or zero.");
         }
         if (nextPrimeNumbers <= 0) {
             throw new IllegalArgumentException("Only positive numbers are allowed.");
         }
         int count;
-        // if from number = 1/2/3, the numbers already contained in the Set are not going to be counted, resulting in inconsistent 1 or 2 extra Prime numbers to be printed.
+        // if from number = 1/2, the numbers already contained in the Set are not going to be counted, resulting in an inconsistent extra Prime number to be printed.
 
-        switch (fromNumber) {
-            case 1, 2 -> count = 2;
-            case 3 -> count = 1;
+        switch (startNumber) {
+            case 1 -> count = 2;
+            case 2 -> count = 1;
             default -> count = 0;
         }
 
-        for (int i = 1; i < 10000; i++) {
-            for (int j = 1; j <= 2; j++) {
-                int n = j == 1 ? 6 * i - 1 : 6 * i + 1;
-
-                if (count == nextPrimeNumbers) {
-                    break;
-                }
-                else if (count > nextPrimeNumbers) {
-                    set.remove(3);
-                    break;
-                }
-
-                if (n >= fromNumber) {
-                    if (PrimeNumbers.validate(n)) {
-                        set.add(n);
-                        count++;
-                    }
-                }
-            }
-        }
-        set.removeIf(x -> x < fromNumber);
-        printList(set.stream().sorted().collect(Collectors.toCollection(LinkedHashSet::new)));
-        count();
+        findAllNext(startNumber, nextPrimeNumbers, count);
+        listOfPrimeNumbers.removeIf(x -> x <= startNumber);
+        printList(listOfPrimeNumbers);
     }
 
-    private static void findAll(int toNumber) {
+    private static void findAllNext(int startNumber, int nextPrimeNumbers, int count) {
 
-        for (int i=1; i<toNumber; i++) {
-            for (int j=1; j<3; j++) {
-                int n = j == 1 ? 6*i-1 : 6*i+1;
+        for (int i = 1; ; i++) {
+            int probeNumber = !(i % 2 == 0) ? (6 * i - 1) : (6 * i + 1);
 
-                if (n > toNumber) {
-                    break;
-                }
-                if (PrimeNumbers.validate(n)) {
-                    set.add(n);
+            if (count == nextPrimeNumbers) {
+                break;
+            } else if (count > nextPrimeNumbers) {
+                listOfPrimeNumbers.remove(3);
+                break;
+            }
+
+            if (PrimeNumbers.validate(probeNumber)) {
+                listOfPrimeNumbers.add(probeNumber);
+                if (probeNumber > startNumber) {
+                    count++;
                 }
             }
         }
     }
 
-    private static void count() {
-        System.out.println("Total of " + set.size() + " prime numbers.");
+    private static void findAll(int endNumber) {
+
+        for (int i=1; ; i++) {
+            int probeNumber = !(i % 2 == 0) ? (6 * i - 1) : (6 * i + 1);
+
+            if (probeNumber > endNumber) {
+                break;
+            }
+            if (validate(probeNumber)) {
+                listOfPrimeNumbers.add(probeNumber);
+            }
+        }
     }
 
-    private static boolean validate(int number) {
-        if (set.isEmpty()) {
+    private static boolean validate(int probeNumber) {
+        if (listOfPrimeNumbers.isEmpty()) {
             throw new IllegalStateException("Cannot iterate an empty list.");
         }
-        for (Integer primeNumber : set) {
-            if (number % primeNumber == 0) {
+        for (Integer primeNumber : listOfPrimeNumbers) {
+            if (probeNumber % primeNumber == 0) {
                 return false;
             }
         }
         return true;
     }
 
-    public static void printList(Set<Integer> list) {
+    private static void count() {
+        System.out.println("Total of " + listOfPrimeNumbers.size() + " prime numbers.");
+    }
+
+    public static void printList(List<Integer> list) {
         for (Integer number : list) {
             System.out.printf("Prime Number: %d%n", number);
         }
+        count();
     }
 }
