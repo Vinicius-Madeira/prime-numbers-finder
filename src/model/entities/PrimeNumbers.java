@@ -40,9 +40,8 @@ public class PrimeNumbers {
     }
 
     public static void findOne(int number) {
-        if (number <= 0) {
-            throw new IllegalArgumentException("There are no prime number below or equal to zero.");
-        }
+        if (number <= 0) throw new IllegalArgumentException("There are no prime number below or equal to zero.");
+
         findAll(number);
         if (listOfPrimeNumbers.stream().anyMatch(x -> x == number)) {
             System.out.println(number + " is a prime number!");
@@ -60,7 +59,7 @@ public class PrimeNumbers {
             throw new IllegalArgumentException("Only positive numbers are allowed.");
         }
         int count;
-        // if from number = 1/2, the numbers already contained in the Set are not going to be counted, resulting in an inconsistent extra Prime number to be printed.
+        // if 'start number' = 1/2, the numbers already contained in the List are not going to be counted, resulting in an inconsistent extra Prime number to be printed.
 
         switch (startNumber) {
             case 1 -> count = 2;
@@ -75,12 +74,12 @@ public class PrimeNumbers {
 
     private static void findAllNext(int startNumber, int nextPrimeNumbers, int count) {
 
-        for (int i = 1; ; i++) {
-            int probeNumber = !(i % 2 == 0) ? (6 * i - 1) : (6 * i + 1);
+        for (double i = 1; ; i++) {
+            int n = (int)Math.ceil(i/2);
+            int probeNumber = !(i % 2 == 0) ? (6 * n - 1) : (6 * n + 1);
 
-            if (count == nextPrimeNumbers) {
-                break;
-            } else if (count > nextPrimeNumbers) {
+            if (count == nextPrimeNumbers) break;
+            else if (count > nextPrimeNumbers) {
                 listOfPrimeNumbers.remove(3);
                 break;
             }
@@ -96,12 +95,11 @@ public class PrimeNumbers {
 
     private static void findAll(int endNumber) {
 
-        for (int i=1; ; i++) {
-            int probeNumber = !(i % 2 == 0) ? (6 * i - 1) : (6 * i + 1);
+        for (double i=1; ; i++) {
+            int n = (int)Math.ceil(i/2);
+            int probeNumber = (!(i % 2 == 0) ? (6 * n - 1) : (6 * n + 1));
 
-            if (probeNumber > endNumber) {
-                break;
-            }
+            if (probeNumber > endNumber) break;
             if (validate(probeNumber)) {
                 listOfPrimeNumbers.add(probeNumber);
             }
