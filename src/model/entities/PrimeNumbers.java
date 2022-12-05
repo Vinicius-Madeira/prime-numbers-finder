@@ -110,8 +110,8 @@ public class PrimeNumbers {
         if (listOfPrimeNumbers.isEmpty()) {
             throw new IllegalStateException("Cannot iterate an empty list.");
         }
-        for (Integer primeNumber : listOfPrimeNumbers) {
-            if (probeNumber % primeNumber == 0) {
+        for (int i=0; i<listOfPrimeNumbers.size()/4+1 ; i++) {
+            if (probeNumber % listOfPrimeNumbers.get(i) == 0) {
                 return false;
             }
         }
@@ -129,3 +129,15 @@ public class PrimeNumbers {
         count();
     }
 }
+/*
+    private static boolean validateOld(int probeNumber) {
+        if (listOfPrimeNumbers.isEmpty()) {
+            throw new IllegalStateException("Cannot iterate an empty list.");
+        }
+        for (Integer primeNumber : listOfPrimeNumbers) {
+            if (probeNumber % primeNumber == 0) {
+                return false;
+            }
+        }
+        return true;
+    }*/
