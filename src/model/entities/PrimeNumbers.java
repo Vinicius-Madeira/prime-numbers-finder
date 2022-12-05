@@ -74,9 +74,9 @@ public class PrimeNumbers {
 
     private static void findAllNext(int startNumber, int nextPrimeNumbers, int count) {
 
-        for (double i = 1; ; i++) {
-            int n = (int)Math.ceil(i/2);
-            int probeNumber = !(i % 2 == 0) ? (6 * n - 1) : (6 * n + 1);
+        for (int i=2; ; i++) {
+            int n = i / 2;
+            int probeNumber = (i % 2 == 0) ? (6 * n - 1) : (6 * n + 1);
 
             if (count == nextPrimeNumbers) break;
             else if (count > nextPrimeNumbers) {
@@ -84,7 +84,7 @@ public class PrimeNumbers {
                 break;
             }
 
-            if (PrimeNumbers.validate(probeNumber)) {
+            if (validate(probeNumber)) {
                 listOfPrimeNumbers.add(probeNumber);
                 if (probeNumber > startNumber) {
                     count++;
@@ -95,9 +95,9 @@ public class PrimeNumbers {
 
     private static void findAll(int endNumber) {
 
-        for (double i=1; ; i++) {
-            int n = (int)Math.ceil(i/2);
-            int probeNumber = (!(i % 2 == 0) ? (6 * n - 1) : (6 * n + 1));
+        for (int i=2; ; i++) {
+            int n = i / 2;
+            int probeNumber = (i % 2 == 0) ? (6 * n - 1) : (6 * n + 1);
 
             if (probeNumber > endNumber) break;
             if (validate(probeNumber)) {
