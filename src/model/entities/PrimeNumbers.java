@@ -110,7 +110,7 @@ public class PrimeNumbers {
         if (listOfPrimeNumbers.isEmpty()) {
             throw new IllegalStateException("Cannot iterate an empty list.");
         }
-        for (int i=0; i<listOfPrimeNumbers.size()/4+1 ; i++) {
+        for (int i=0; i<listOfPrimeNumbers.size()/7+2 ; i++) {
             if (probeNumber % listOfPrimeNumbers.get(i) == 0) {
                 return false;
             }
