@@ -74,18 +74,19 @@ public class PrimeNumbers {
 
     private static void findAllNext(int startNumber, int nextPrimeNumbers, int count) {
 
-        for (int i=2; ; i++) {
+        for (int i=2, index=1; ; i++) {
             int n = i / 2;
             int probeNumber = (i % 2 == 0) ? (6 * n - 1) : (6 * n + 1);
 
-            if (count == nextPrimeNumbers) break;
+            if (count == nextPrimeNumbers) return;
             else if (count > nextPrimeNumbers) {
                 listOfPrimeNumbers.remove(3);
-                break;
+                return;
             }
-
-            if (validate(probeNumber)) {
+            if (probeNumber == listOfPrimeNumbers.get(index) * listOfPrimeNumbers.get(index)) index++;
+            if (validate(probeNumber, index)) {
                 listOfPrimeNumbers.add(probeNumber);
+                if (index == 1) index = listOfPrimeNumbers.indexOf(probeNumber);
                 if (probeNumber > startNumber) {
                     count++;
                 }
@@ -95,22 +96,23 @@ public class PrimeNumbers {
 
     private static void findAll(int endNumber) {
 
-        for (int i=2; ; i++) {
+        for (int i=2, index=1; ; i++) {
             int n = i / 2;
             int probeNumber = (i % 2 == 0) ? (6 * n - 1) : (6 * n + 1);
 
-            if (probeNumber > endNumber) break;
-            if (validate(probeNumber)) {
+            if (probeNumber > endNumber) return;
+            if (probeNumber == listOfPrimeNumbers.get(index) * listOfPrimeNumbers.get(index)) index++;
+            if (validate(probeNumber, index)) {
                 listOfPrimeNumbers.add(probeNumber);
+                if (index == 1) index = listOfPrimeNumbers.indexOf(probeNumber);
+
             }
         }
     }
 
-    private static boolean validate(int probeNumber) {
-        if (listOfPrimeNumbers.isEmpty()) {
-            throw new IllegalStateException("Cannot iterate an empty list.");
-        }
-        for (int i=0; i<listOfPrimeNumbers.size()/7+2 ; i++) {
+    private static boolean validate(int probeNumber, int index) {
+
+        for (int i=0; i <= listOfPrimeNumbers.indexOf(listOfPrimeNumbers.get(index)); i++) {
             if (probeNumber % listOfPrimeNumbers.get(i) == 0) {
                 return false;
             }
